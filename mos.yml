@@ -1,0 +1,27 @@
+author: Turbine Kreuzberg GmbH
+type: lib
+description: Mongoose OS library for TCA9548A
+version: 1.0
+platforms: [esp8266, esp32]
+
+sources:
+  - src
+
+includes:
+  - include
+
+config_schema:
+  - ["tca9548a", "o", {title: "tca9548a settings"}]
+  - ["tca9548a.i2caddr", "i", 0x70, {title: "I2C Address"}]
+  - ["tca9548a.reset_gpio", "i", -1, {title: "Reset pin"}]
+
+libs:
+  - location: https://github.com/mongoose-os-libs/i2c
+
+tags:
+  - c
+  - i2c
+  - hw
+  - docs:drivers:TCA9548A I2C
+
+manifest_version: 2017-09-29
