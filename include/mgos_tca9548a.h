@@ -28,14 +28,14 @@
 #define MGOS_TCA9548A_I2C_ADDR6 (0x76)
 #define MGOS_TCA9548A_I2C_ADDR7 (0x77)
 
-#define MGOS_TCA9548_CHANNEL0 (1 << 0)
-#define MGOS_TCA9548_CHANNEL1 (1 << 1)
-#define MGOS_TCA9548_CHANNEL2 (1 << 2)
-#define MGOS_TCA9548_CHANNEL3 (1 << 3)
-#define MGOS_TCA9548_CHANNEL4 (1 << 4)
-#define MGOS_TCA9548_CHANNEL5 (1 << 5)
-#define MGOS_TCA9548_CHANNEL6 (1 << 6)
-#define MGOS_TCA9548_CHANNEL7 (1 << 7)
+#define MGOS_TCA9548_CHANNEL0 (0x01)
+#define MGOS_TCA9548_CHANNEL1 (0x02)
+#define MGOS_TCA9548_CHANNEL2 (0x04)
+#define MGOS_TCA9548_CHANNEL3 (0x08)
+#define MGOS_TCA9548_CHANNEL4 (0x10)
+#define MGOS_TCA9548_CHANNEL5 (0x20)
+#define MGOS_TCA9548_CHANNEL6 (0x40)
+#define MGOS_TCA9548_CHANNEL7 (0x80)
 
 #ifdef __cplusplus
 extern "C" {
@@ -43,12 +43,39 @@ extern "C" {
 
 struct mgos_tca9548a;
 
-struct mgos_tca9548a *mgos_tca9548a_create(struct mgos_i2c *i2c,
-                                           uint8_t i2caddr, int reset_gpio);
+/**
+ * Initialize a TCA9548A on the I2C bus `i2c` at address specified in `i2caddr`,
+ * upon success a new `struct mgos_tca9548a` is allocated and returned. 
+ * If the device could not be initialized, NULL is returned.
+ * 
+ * If `reset_gpio` is not -1 it will configure the pin as output and use it to reset the device.
+ * After reset all channels are set to off
+ */
+
+struct mgos_tca9548a *mgos_tca9548a_create(struct mgos_i2c *i2c, uint8_t i2caddr, int reset_gpio);
+
+/**
+ * Reset TCA9548A if reset_gpio is configured
+ */
 bool mgos_tca9548a_reset(struct mgos_tca9548a *dev);
+
+/**
+ * Destroy the data structure associated with a TCA9548A device. The reference
+ * to the pointer of the `struct mgos_tca9548a` has to be provided, and upon
+ * successful destruction, its associated memory will be freed and the pointer
+ * set to NULL.
+ */
 bool mgos_tca9548a_destroy(struct mgos_tca9548a **dev);
 
+/**
+ * Set TCA9548A channels to `channels` state. Each bit on `channels` will set the 
+ * corresponding channel to on(1) or off(0).
+ */
 bool mgos_tca9548a_set_channels(struct mgos_tca9548a *dev, uint8_t channels);
+
+/**
+ * Get TCA9548A channels current state
+ */
 bool mgos_tca9548a_get_channels(struct mgos_tca9548a *dev, uint8_t *channels);
 
 #ifdef __cplusplus

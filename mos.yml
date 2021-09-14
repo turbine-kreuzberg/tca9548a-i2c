@@ -2,7 +2,6 @@ author: Turbine Kreuzberg GmbH
 type: lib
 description: Mongoose OS library for TCA9548A
 version: 1.0
-platforms: [esp8266, esp32]
 
 sources:
   - src
